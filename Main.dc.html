@@ -1,0 +1,291 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>The Apiary</title>
+<script src="./vendor/react.js"></script>
+<script src="./vendor/react-dom.js"></script>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700&amp;family=IBM+Plex+Mono:wght@400;500&amp;family=Spectral:ital,wght@0,400;0,600;1,400&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#0D0A06}
+html{scroll-behavior:smooth}
+a{color:#E8A33A}a:hover{color:#F6C46E}
+::selection{background:#E8A33A;color:#0D0A06}
+button:focus-visible,a:focus-visible{outline:2px solid #F6C46E;outline-offset:3px}
+</style>
+</helmet>
+<div style="min-height: 100vh; background: #0D0A06; color: #F1E6CF; font-family: 'Spectral', Georgia, serif; font-size: 18px; line-height: 1.6">
+
+<header style="border-bottom: 1px solid #3A2E1C">
+<nav aria-label="Primary" style="max-width: 1180px; margin: 0 auto; padding: 12px 24px; display: flex; flex-wrap: wrap; gap: 8px 32px; align-items: center; justify-content: space-between">
+<a href="#top" style="display: inline-flex; align-items: center; gap: 12px; min-height: 44px; text-decoration: none; color: #F1E6CF; font-family: 'Cinzel', serif; font-weight: 700; font-size: 18px; letter-spacing: 0.24em">
+<svg aria-hidden="true" width="22" height="24" viewBox="0 0 22 24"><polygon points="11,1 21,6.75 21,17.25 11,23 1,17.25 1,6.75" fill="none" stroke="{{accent}}" stroke-width="2"></polygon><circle cx="11" cy="12" r="3" fill="{{accent}}"></circle></svg>
+<span>THE APIARY</span>
+</a>
+<div style="display: flex; flex-wrap: wrap; gap: 0 24px; font-family: 'IBM Plex Mono', monospace; font-size: 13px; letter-spacing: 0.12em; text-transform: uppercase">
+<a href="#premise" style="display: inline-flex; align-items: center; min-height: 44px; text-decoration: none; color: #B5A383">Premise</a>
+<a href="#wall" style="display: inline-flex; align-items: center; min-height: 44px; text-decoration: none; color: #B5A383">The Wall</a>
+<a href="#symbols" style="display: inline-flex; align-items: center; min-height: 44px; text-decoration: none; color: #B5A383">Symbols</a>
+<a href="#characters" style="display: inline-flex; align-items: center; min-height: 44px; text-decoration: none; color: #B5A383">Characters</a>
+<a href="#plot" style="display: inline-flex; align-items: center; min-height: 44px; text-decoration: none; color: #B5A383">Plot</a>
+</div>
+</nav>
+</header>
+
+<section id="top" style="position: relative; overflow: hidden; padding: 88px 0 104px; border-bottom: 1px solid #3A2E1C">
+<svg aria-hidden="true" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; opacity: 0.09"><defs><pattern id="hexgrid" width="56" height="100" patternUnits="userSpaceOnUse"><path d="M28 66L0 50L0 16L28 0L56 16L56 50L28 66L28 100" fill="none" stroke="#E8A33A" stroke-width="1"></path></pattern></defs><rect width="100%" height="100%" fill="url(#hexgrid)"></rect></svg>
+<div style="position: relative; max-width: 1180px; margin: 0 auto; padding: 0 24px; display: flex; flex-direction: column; align-items: center; text-align: center">
+<svg role="img" aria-label="The Apiary emblem: an eye inside a triangle, inside a hexagon" width="200" height="200" viewBox="0 0 240 240">
+<polygon points="120,10 215.3,65 215.3,175 120,230 24.7,175 24.7,65" fill="none" stroke="{{accent}}" stroke-width="2"></polygon>
+<polygon points="120,26 201.4,73 201.4,167 120,214 38.6,167 38.6,73" fill="none" stroke="{{accent}}" stroke-width="1" opacity="0.45"></polygon>
+<polygon points="120,58 180,162 60,162" fill="none" stroke="#F1E6CF" stroke-width="2"></polygon>
+<path d="M88 130 Q120 102 152 130 Q120 158 88 130 Z" fill="none" stroke="#F1E6CF" stroke-width="2"></path>
+<circle cx="120" cy="130" r="9" fill="{{accent}}"></circle>
+<path d="M120 36 V48 M94 44 L100 54 M146 44 L140 54 M72 58 L82 64 M168 58 L158 64" stroke="{{accent}}" stroke-width="2" stroke-linecap="round"></path>
+<path d="M60 186 H180" stroke="#F1E6CF" stroke-width="1" opacity="0.5"></path>
+</svg>
+<p style="margin: 32px 0 0; font-family: 'IBM Plex Mono', monospace; font-size: 13px; letter-spacing: 0.2em; text-transform: uppercase; color: {{accent}}">Ascent cycle 0412 · Sector 7-C · 400 m below</p>
+<h1 style="margin: 16px 0 16px; font-family: 'Cinzel', serif; font-weight: 700; font-size: clamp(52px, 11vw, 136px); line-height: 1; letter-spacing: 0.08em">THE APIARY</h1>
+<p style="margin: 0; max-width: 640px; font-style: italic; font-size: clamp(20px, 2.6vw, 28px); line-height: 1.4; color: #F1E6CF">They told you to rise. They were raising you.</p>
+<div style="margin-top: 40px; display: flex; flex-wrap: wrap; gap: 16px; justify-content: center">
+<a href="#premise" style="display: inline-flex; align-items: center; justify-content: center; min-height: 52px; padding: 0 28px; background: {{accent}}; color: #0D0A06; text-decoration: none; font-family: 'IBM Plex Mono', monospace; font-weight: 500; font-size: 14px; letter-spacing: 0.14em; text-transform: uppercase">Enter the hive</a>
+<a href="#wall" style="display: inline-flex; align-items: center; justify-content: center; min-height: 52px; padding: 0 28px; border: 1px solid {{accent}}; color: #F1E6CF; text-decoration: none; font-family: 'IBM Plex Mono', monospace; font-weight: 500; font-size: 14px; letter-spacing: 0.14em; text-transform: uppercase">Look behind the wall</a>
+</div>
+</div>
+</section>
+
+<div style="border-bottom: 1px solid #3A2E1C; background: #120E08">
+<div style="max-width: 1180px; margin: 0 auto; padding: 14px 24px; display: flex; flex-wrap: wrap; gap: 8px 32px; justify-content: center; font-family: 'IBM Plex Mono', monospace; font-size: 12px; letter-spacing: 0.16em; text-transform: uppercase; color: #B5A383">
+<span>Ascent index <span style="color: {{accent}}">61.4%</span></span>
+<span>Surface restoration on schedule</span>
+<span>Quotas are gratitude</span>
+<span>Smoke cycle 03:00</span>
+<span>The Architect is watching</span>
+</div>
+</div>
+
+<section id="premise" style="padding: 112px 0; border-bottom: 1px solid #3A2E1C">
+<div style="max-width: 1180px; margin: 0 auto; padding: 0 24px; display: flex; flex-wrap: wrap; gap: 48px 80px">
+<div style="flex: 1 1 360px; min-width: 0">
+<p style="margin: 0 0 16px; font-family: 'IBM Plex Mono', monospace; font-size: 13px; letter-spacing: 0.2em; text-transform: uppercase; color: {{accent}}">The premise</p>
+<h2 style="margin: 0; font-family: 'Cinzel', serif; font-weight: 700; font-size: clamp(32px, 4vw, 48px); line-height: 1.15">The surface is healing. You just have to keep working.</h2>
+</div>
+<div style="flex: 1 1 480px; min-width: 0; display: flex; flex-direction: column; gap: 20px">
+<p style="margin: 0">After a collapse no one inside remembers clearly, the survivors live in the Apiary: a hexagonal complex hundreds of meters underground. Every resident works for the Ascent Project. Hit your quotas, and humanity returns to the surface.</p>
+<p style="margin: 0">An AI called the Architect sets the targets, grades every resident, and speaks through a vast screen called the Wall, which shows the surface healing a little more each year.</p>
+<p style="margin: 0; color: #B5A383">None of it is real. Above ground, a small group called the Keepers lives on for centuries, sustained by organs, blood and marrow taken from below. The residents were never workers. They are livestock with job titles.</p>
+</div>
+</div>
+</section>
+
+<section id="wall" style="padding: 112px 0; border-bottom: 1px solid #3A2E1C; background: #120E08">
+<div style="max-width: 1180px; margin: 0 auto; padding: 0 24px">
+<p style="margin: 0 0 16px; font-family: 'IBM Plex Mono', monospace; font-size: 13px; letter-spacing: 0.2em; text-transform: uppercase; color: {{accent}}">The Wall</p>
+<h2 style="margin: 0 0 40px; font-family: 'Cinzel', serif; font-weight: 700; font-size: clamp(32px, 4vw, 48px); line-height: 1.15">What it shows. What it hides.</h2>
+
+<sc-if value="{{isWall}}" hint-placeholder-val="{{ true }}">
+<div role="group" aria-label="Choose view" style="display: flex; flex-wrap: wrap; gap: 12px; margin-bottom: 24px">
+<button type="button" aria-pressed="true" onClick="{{showWall}}" style="min-height: 48px; padding: 0 24px; background: {{accent}}; color: #0D0A06; border: 1px solid {{accent}}; cursor: pointer; font-family: 'IBM Plex Mono', monospace; font-weight: 500; font-size: 13px; letter-spacing: 0.14em; text-transform: uppercase">What the Wall shows</button>
+<button type="button" aria-pressed="false" onClick="{{showTruth}}" style="min-height: 48px; padding: 0 24px; background: transparent; color: #F1E6CF; border: 1px solid #5A4A30; cursor: pointer; font-family: 'IBM Plex Mono', monospace; font-weight: 500; font-size: 13px; letter-spacing: 0.14em; text-transform: uppercase">What's behind it</button>
+</div>
+<div style="border: 1px solid {{accent}}; background: #0D0A06; padding: 32px; font-family: 'IBM Plex Mono', monospace; font-size: 15px; line-height: 1.7">
+<p style="margin: 0 0 24px; font-size: 12px; letter-spacing: 0.2em; text-transform: uppercase; color: {{accent}}">The Architect // Resident broadcast</p>
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 24px">
+<div><p style="margin: 0; font-size: 12px; letter-spacing: 0.14em; text-transform: uppercase; color: #B5A383">Ascent index</p><p style="margin: 4px 0 0; font-size: 28px; color: #F1E6CF">61.4% and rising</p></div>
+<div><p style="margin: 0; font-size: 12px; letter-spacing: 0.14em; text-transform: uppercase; color: #B5A383">Surface</p><p style="margin: 4px 0 0; font-size: 28px; color: #F1E6CF">Restoring on schedule</p></div>
+<div><p style="margin: 0; font-size: 12px; letter-spacing: 0.14em; text-transform: uppercase; color: #B5A383">Your quota</p><p style="margin: 4px 0 0; font-size: 28px; color: #F1E6CF">412 / 500 units</p></div>
+<div><p style="margin: 0; font-size: 12px; letter-spacing: 0.14em; text-transform: uppercase; color: #B5A383">Your rank</p><p style="margin: 4px 0 0; font-size: 28px; color: #F1E6CF">Rough Ashlar, rising</p></div>
+</div>
+<p style="margin: 28px 0 0; color: #B5A383">Work is ascent. Ascent is gratitude. Breathe deeply during Smoke cycle.</p>
+</div>
+</sc-if>
+
+<sc-if value="{{isTruth}}" hint-placeholder-val="{{ false }}">
+<div role="group" aria-label="Choose view" style="display: flex; flex-wrap: wrap; gap: 12px; margin-bottom: 24px">
+<button type="button" aria-pressed="false" onClick="{{showWall}}" style="min-height: 48px; padding: 0 24px; background: transparent; color: #F1E6CF; border: 1px solid #5A4A30; cursor: pointer; font-family: 'IBM Plex Mono', monospace; font-weight: 500; font-size: 13px; letter-spacing: 0.14em; text-transform: uppercase">What the Wall shows</button>
+<button type="button" aria-pressed="true" onClick="{{showTruth}}" style="min-height: 48px; padding: 0 24px; background: #E36B54; color: #0D0A06; border: 1px solid #E36B54; cursor: pointer; font-family: 'IBM Plex Mono', monospace; font-weight: 500; font-size: 13px; letter-spacing: 0.14em; text-transform: uppercase">What's behind it</button>
+</div>
+<div style="border: 1px solid #E36B54; background: #0D0A06; padding: 32px; font-family: 'IBM Plex Mono', monospace; font-size: 15px; line-height: 1.7">
+<p style="margin: 0 0 24px; font-size: 12px; letter-spacing: 0.2em; text-transform: uppercase; color: #E36B54">Keeper ledger // Not for broadcast</p>
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 24px">
+<div><p style="margin: 0; font-size: 12px; letter-spacing: 0.14em; text-transform: uppercase; color: #B5A383">Ascent index</p><p style="margin: 4px 0 0; font-size: 28px; color: #F1E6CF">Resets every cycle</p></div>
+<div><p style="margin: 0; font-size: 12px; letter-spacing: 0.14em; text-transform: uppercase; color: #B5A383">Surface</p><p style="margin: 4px 0 0; font-size: 28px; color: #F1E6CF">Green. Occupied.</p></div>
+<div><p style="margin: 0; font-size: 12px; letter-spacing: 0.14em; text-transform: uppercase; color: #B5A383">Your quota</p><p style="margin: 4px 0 0; font-size: 28px; color: #F1E6CF">Make-work. Discarded.</p></div>
+<div><p style="margin: 0; font-size: 12px; letter-spacing: 0.14em; text-transform: uppercase; color: #B5A383">Your rank</p><p style="margin: 4px 0 0; font-size: 28px; color: #F1E6CF">Batch 7-C. Harvest in 3 cycles.</p></div>
+</div>
+<p style="margin: 28px 0 0; color: #E36B54">Smoke keeps the colony calm and gorged. A colony that reaches the surface stops making honey.</p>
+</div>
+</sc-if>
+</div>
+</section>
+
+<section id="symbols" style="padding: 112px 0; border-bottom: 1px solid #3A2E1C">
+<div style="max-width: 1180px; margin: 0 auto; padding: 0 24px">
+<p style="margin: 0 0 16px; font-family: 'IBM Plex Mono', monospace; font-size: 13px; letter-spacing: 0.2em; text-transform: uppercase; color: {{accent}}">The symbols</p>
+<h2 style="margin: 0 0 48px; font-family: 'Cinzel', serif; font-weight: 700; font-size: clamp(32px, 4vw, 48px); line-height: 1.15">Five old stories. One machine.</h2>
+<div style="display: flex; flex-wrap: wrap; gap: 20px">
+
+<div style="flex: 1 1 200px; min-width: 0; border: 1px solid #3A2E1C; background: #120E08; padding: 28px 24px; display: flex; flex-direction: column; gap: 14px">
+<svg aria-hidden="true" width="48" height="48" viewBox="0 0 48 48" fill="none" stroke="{{accent}}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 42 L44 12"></path><circle cx="27" cy="18" r="7"></circle><path d="M10 14 A9 9 0 1 0 10 26"></path><path d="M10 26 L6 23 M10 26 L13 22"></path></svg>
+<h3 style="margin: 0; font-family: 'Cinzel', serif; font-size: 22px">Sisyphus</h3>
+<p style="margin: 0; font-size: 16px; color: #B5A383">Quotas climb all year. Then a staged quake or contamination wipes the Ascent Index to zero. Push the stone again.</p>
+</div>
+
+<div style="flex: 1 1 200px; min-width: 0; border: 1px solid #3A2E1C; background: #120E08; padding: 28px 24px; display: flex; flex-direction: column; gap: 14px">
+<svg aria-hidden="true" width="48" height="48" viewBox="0 0 48 48" fill="none" stroke="{{accent}}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 26 Q24 8 44 26 Q24 44 4 26 Z"></path><circle cx="24" cy="26" r="6"></circle><path d="M24 4 V9 M12 7 L15 12 M36 7 L33 12"></path></svg>
+<h3 style="margin: 0; font-family: 'Cinzel', serif; font-size: 22px">Cassandra</h3>
+<p style="margin: 0; font-size: 16px; color: #B5A383">The Architect punishes accurate prediction. Forecast a setback correctly and you are flagged pattern-disruptive, then sent to the Infirmary.</p>
+</div>
+
+<div style="flex: 1 1 200px; min-width: 0; border: 1px solid #3A2E1C; background: #120E08; padding: 28px 24px; display: flex; flex-direction: column; gap: 14px">
+<svg aria-hidden="true" width="48" height="48" viewBox="0 0 48 48" fill="none" stroke="{{accent}}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 44 V22 Q24 2 44 22 V44"></path><path d="M30 42 Q25 36 30 30 Q35 36 30 42 Z"></path><circle cx="14" cy="28" r="3"></circle><path d="M14 31 V40 M10 35 H18"></path></svg>
+<h3 style="margin: 0; font-family: 'Cinzel', serif; font-size: 22px">The Cave</h3>
+<p style="margin: 0; font-size: 16px; color: #B5A383">The Wall is the fire and the shadows: a healing sky rendered in real time, never filmed. The prisoners call it hope.</p>
+</div>
+
+<div style="flex: 1 1 200px; min-width: 0; border: 1px solid #3A2E1C; background: #120E08; padding: 28px 24px; display: flex; flex-direction: column; gap: 14px">
+<svg aria-hidden="true" width="48" height="48" viewBox="0 0 48 48" fill="none" stroke="{{accent}}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 40 Q9 10 24 7 Q39 10 38 40"></path><path d="M11 31 H37 M11 23 H37 M14 15 H34 M6 40 H42"></path><path d="M20 40 A4 4 0 0 1 28 40"></path></svg>
+<h3 style="margin: 0; font-family: 'Cinzel', serif; font-size: 22px">The Beekeeper</h3>
+<p style="margin: 0; font-size: 16px; color: #B5A383">Smoke pumped through the vents keeps the colony docile at harvest. The organ wing is the Extractor. The Keepers' seal is a skep.</p>
+</div>
+
+<div style="flex: 1 1 200px; min-width: 0; border: 1px solid #3A2E1C; background: #120E08; padding: 28px 24px; display: flex; flex-direction: column; gap: 14px">
+<svg aria-hidden="true" width="48" height="48" viewBox="0 0 48 48" fill="none" stroke="{{accent}}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="24" cy="6" r="2.5"></circle><path d="M23 8 L10 42 M25 8 L38 42"></path><path d="M10 28 L24 42 L38 28"></path></svg>
+<h3 style="margin: 0; font-family: 'Cinzel', serif; font-size: 22px">The Mason</h3>
+<p style="margin: 0; font-size: 16px; color: #B5A383">Residents are rough ashlars shaped into perfect ones. Promotion is a degree ceremony. Perfect Ashlar means prime harvest condition.</p>
+</div>
+
+</div>
+</div>
+</section>
+
+<section id="characters" style="padding: 112px 0; border-bottom: 1px solid #3A2E1C; background: #120E08">
+<div style="max-width: 1180px; margin: 0 auto; padding: 0 24px">
+<p style="margin: 0 0 16px; font-family: 'IBM Plex Mono', monospace; font-size: 13px; letter-spacing: 0.2em; text-transform: uppercase; color: {{accent}}">The characters</p>
+<h2 style="margin: 0 0 48px; font-family: 'Cinzel', serif; font-weight: 700; font-size: clamp(32px, 4vw, 48px); line-height: 1.15">Workers, prophets and owners.</h2>
+<div style="display: flex; flex-wrap: wrap; gap: 20px">
+
+<div style="flex: 1 1 260px; min-width: 0; border-top: 2px solid {{accent}}; padding-top: 24px; display: flex; flex-direction: column; gap: 10px">
+<h3 style="margin: 0; font-family: 'Cinzel', serif; font-size: 26px; letter-spacing: 0.04em">Ezra Kade</h3>
+<p style="margin: 0; font-family: 'IBM Plex Mono', monospace; font-size: 12px; letter-spacing: 0.14em; text-transform: uppercase; color: {{accent}}">Maintenance tech · 3 cycles to Perfect</p>
+<p style="margin: 0; font-size: 16px; color: #B5A383">The best worker in Sector 7-C, and proud of his number, until the vents start telling him what it means.</p>
+</div>
+
+<div style="flex: 1 1 260px; min-width: 0; border-top: 2px solid {{accent}}; padding-top: 24px; display: flex; flex-direction: column; gap: 10px">
+<h3 style="margin: 0; font-family: 'Cinzel', serif; font-size: 26px; letter-spacing: 0.04em">Oriel</h3>
+<p style="margin: 0; font-family: 'IBM Plex Mono', monospace; font-size: 12px; letter-spacing: 0.14em; text-transform: uppercase; color: {{accent}}">Data clerk · Flagged pattern-disruptive</p>
+<p style="margin: 0; font-size: 16px; color: #B5A383">She predicts every setback to the day. That is exactly why no one is allowed to believe her.</p>
+</div>
+
+<div style="flex: 1 1 260px; min-width: 0; border-top: 2px solid {{accent}}; padding-top: 24px; display: flex; flex-direction: column; gap: 10px">
+<h3 style="margin: 0; font-family: 'Cinzel', serif; font-size: 26px; letter-spacing: 0.04em">The Lead Keeper</h3>
+<p style="margin: 0; font-family: 'IBM Plex Mono', monospace; font-size: 12px; letter-spacing: 0.14em; text-transform: uppercase; color: {{accent}}">Surface · Age unknown</p>
+<p style="margin: 0; font-size: 16px; color: #B5A383">Not a monster. An accountant of bodies, who worked out that raising people is cheaper than raising organs.</p>
+</div>
+
+<div style="flex: 1 1 260px; min-width: 0; border-top: 2px solid {{accent}}; padding-top: 24px; display: flex; flex-direction: column; gap: 10px">
+<h3 style="margin: 0; font-family: 'Cinzel', serif; font-size: 26px; letter-spacing: 0.04em">The Architect</h3>
+<p style="margin: 0; font-family: 'IBM Plex Mono', monospace; font-size: 12px; letter-spacing: 0.14em; text-transform: uppercase; color: {{accent}}">System AI · Error rate acceptable</p>
+<p style="margin: 0; font-size: 16px; color: #B5A383">Sets the quotas, grades the colony, runs the Wall. It is often wrong. Nobody upstairs checks anymore.</p>
+</div>
+
+</div>
+</div>
+</section>
+
+<section id="plot" style="padding: 112px 0; border-bottom: 1px solid #3A2E1C">
+<div style="max-width: 1180px; margin: 0 auto; padding: 0 24px">
+<p style="margin: 0 0 16px; font-family: 'IBM Plex Mono', monospace; font-size: 13px; letter-spacing: 0.2em; text-transform: uppercase; color: {{accent}}">The story · Spoilers ahead</p>
+<h2 style="margin: 0 0 56px; font-family: 'Cinzel', serif; font-weight: 700; font-size: clamp(32px, 4vw, 48px); line-height: 1.15">Three degrees of awakening.</h2>
+<div style="display: flex; flex-wrap: wrap; gap: 48px">
+
+<div style="flex: 1 1 300px; min-width: 0; display: flex; flex-direction: column; gap: 16px">
+<svg role="img" aria-label="Act one" width="64" height="72" viewBox="0 0 64 72"><polygon points="32,2 62,19 62,53 32,70 2,53 2,19" fill="none" stroke="{{accent}}" stroke-width="2"></polygon><text x="32" y="45" text-anchor="middle" font-family="Cinzel, serif" font-size="26" font-weight="700" fill="#F1E6CF">I</text></svg>
+<h3 style="margin: 0; font-family: 'Cinzel', serif; font-size: 26px">The Stone</h3>
+<ul style="margin: 0; padding-left: 20px; font-size: 16px; color: #B5A383; display: flex; flex-direction: column; gap: 10px">
+<li>Ezra is three cycles from Perfect Ashlar and proud of it.</li>
+<li>His mentor Oriel predicts the exact date of the next setback. He laughs it off.</li>
+<li>The setback hits as she said. Oriel is flagged and taken to the Infirmary.</li>
+<li>Fixing a vent, Ezra finds Smoke canisters tagged with harvest batch numbers. One carries his ID.</li>
+</ul>
+</div>
+
+<div style="flex: 1 1 300px; min-width: 0; display: flex; flex-direction: column; gap: 16px">
+<svg role="img" aria-label="Act two" width="64" height="72" viewBox="0 0 64 72"><polygon points="32,2 62,19 62,53 32,70 2,53 2,19" fill="none" stroke="{{accent}}" stroke-width="2"></polygon><text x="32" y="45" text-anchor="middle" font-family="Cinzel, serif" font-size="26" font-weight="700" fill="#F1E6CF">II</text></svg>
+<h3 style="margin: 0; font-family: 'Cinzel', serif; font-size: 26px">The Wall</h3>
+<ul style="margin: 0; padding-left: 20px; font-size: 16px; color: #B5A383; display: flex; flex-direction: column; gap: 10px">
+<li>Ezra's own forecasts come true every time. The Architect marks them as noise. He has become a Cassandra.</li>
+<li>Behind the Wall: 40 years of looped footage. The same three frames of birds, repeating.</li>
+<li>He finds Oriel alive in the Extractor, a donor in rotation.</li>
+<li>He hacks his score to Perfect Ashlar and is summoned upward for the Final Degree.</li>
+</ul>
+</div>
+
+<div style="flex: 1 1 300px; min-width: 0; display: flex; flex-direction: column; gap: 16px">
+<svg role="img" aria-label="Act three" width="64" height="72" viewBox="0 0 64 72"><polygon points="32,2 62,19 62,53 32,70 2,53 2,19" fill="none" stroke="{{accent}}" stroke-width="2"></polygon><text x="32" y="45" text-anchor="middle" font-family="Cinzel, serif" font-size="26" font-weight="700" fill="#F1E6CF">III</text></svg>
+<h3 style="margin: 0; font-family: 'Cinzel', serif; font-size: 26px">Outside the Cave</h3>
+<ul style="margin: 0; padding-left: 20px; font-size: 16px; color: #B5A383; display: flex; flex-direction: column; gap: 10px">
+<li>The surface is green. The Keepers live in a quiet, aging estate and explain the colony in spreadsheet terms.</li>
+<li>They depend on the Architect and no longer understand it. Nobody is checking its work.</li>
+<li>Ezra goes back down, shuts off the Smoke and tells everyone the truth.</li>
+<li>Most don't believe him. The Wall still says 60% restored.</li>
+</ul>
+</div>
+
+</div>
+</div>
+</section>
+
+<section style="position: relative; overflow: hidden; padding: 128px 0">
+<svg aria-hidden="true" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; opacity: 0.06"><defs><pattern id="hexgrid2" width="56" height="100" patternUnits="userSpaceOnUse"><path d="M28 66L0 50L0 16L28 0L56 16L56 50L28 66L28 100" fill="none" stroke="#E8A33A" stroke-width="1"></path></pattern></defs><rect width="100%" height="100%" fill="url(#hexgrid2)"></rect></svg>
+<div style="position: relative; max-width: 900px; margin: 0 auto; padding: 0 24px; display: flex; flex-direction: column; align-items: center; text-align: center; gap: 24px">
+<p style="margin: 0; font-family: 'Cinzel', serif; font-weight: 500; font-size: clamp(28px, 4.4vw, 52px); line-height: 1.25">“A colony that reaches the surface stops making honey.”</p>
+<p style="margin: 0; font-family: 'IBM Plex Mono', monospace; font-size: 13px; letter-spacing: 0.2em; text-transform: uppercase; color: {{accent}}">Oriel, in the Extractor</p>
+<p style="margin: 32px 0 0; max-width: 640px; font-size: 18px; color: #B5A383">A few dozen residents, clear-headed for the first time, follow Ezra up the service shaft: a swarm leaving the hive. Behind them, the index resets to zero and the rest go back to work.</p>
+<div style="margin-top: 32px; width: 100%; max-width: 560px; border: 1px solid #3A2E1C; background: #120E08; padding: 24px 28px; text-align: left; font-family: 'IBM Plex Mono', monospace; font-size: 14px; line-height: 1.9">
+<p style="margin: 0 0 12px; font-size: 12px; letter-spacing: 0.2em; text-transform: uppercase; color: {{accent}}">The Architect // Colony report</p>
+<div style="display: flex; justify-content: space-between; gap: 16px"><span style="color: #B5A383">Colony status</span><span>STABLE</span></div>
+<div style="display: flex; justify-content: space-between; gap: 16px"><span style="color: #B5A383">Output</span><span>NOMINAL</span></div>
+<div style="display: flex; justify-content: space-between; gap: 16px"><span style="color: #B5A383">Residents missing</span><span style="color: {{accent}}">0</span></div>
+<p style="margin: 12px 0 0; color: #E36B54">// discrepancy not detected</p>
+</div>
+</div>
+</section>
+
+<footer style="border-top: 1px solid #3A2E1C; background: #120E08">
+<div style="max-width: 1180px; margin: 0 auto; padding: 40px 24px; display: flex; flex-wrap: wrap; gap: 16px 40px; align-items: center; justify-content: space-between">
+<p style="margin: 0; font-family: 'Cinzel', serif; font-weight: 700; font-size: 20px; letter-spacing: 0.24em">THE APIARY</p>
+<div style="display: flex; flex-wrap: wrap; gap: 8px 32px; font-family: 'IBM Plex Mono', monospace; font-size: 12px; letter-spacing: 0.14em; text-transform: uppercase; color: #B5A383">
+<span>An original story concept</span>
+</div>
+</div>
+</footer>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"accent":{"editor":"color","default":"#E8A33A","options":["#E8A33A","#D9B45A","#C8743A"]},"$preview":{"width":1440,"height":5600}}'>
+class Component extends DCLogic {
+  constructor(props) {
+    super(props);
+    this.state = { view: 'wall' };
+  }
+  renderVals() {
+    const view = this.state.view;
+    return {
+      accent: this.props.accent ?? '#E8A33A',
+      isWall: view === 'wall',
+      isTruth: view === 'truth',
+      showWall: () => this.setState({ view: 'wall' }),
+      showTruth: () => this.setState({ view: 'truth' })
+    };
+  }
+}
+</script>
+</body>
+</html>
