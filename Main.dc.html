@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <title>The Apiary</title>
 <script src="./vendor/react.js"></script>
 <script src="./vendor/react-dom.js"></script>
@@ -18,88 +19,262 @@ html{scroll-behavior:smooth}
 a{color:#E8A33A}a:hover{color:#F6C46E}
 ::selection{background:#E8A33A;color:#0D0A06}
 button:focus-visible,a:focus-visible{outline:2px solid #F6C46E;outline-offset:3px}
+
+/* ---------- motion system ---------- */
+:root{--honey:#E8A33A;--blood:#E36B54;--ease:cubic-bezier(.2,.7,.2,1)}
+section[id]{scroll-margin-top:76px}
+
+/* sticky header + active section */
+.site-header{position:sticky;top:0;z-index:40;background:rgba(13,10,6,.86);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);transition:box-shadow .4s}
+.site-header.is-scrolled{box-shadow:0 12px 32px -14px rgba(0,0,0,.9)}
+@media (max-width:720px){.site-header{position:relative}section[id]{scroll-margin-top:0}}
+.navlink{position:relative;transition:color .3s}
+.navlink::after{content:"";position:absolute;left:0;right:0;bottom:9px;height:1px;background:var(--honey);transform:scaleX(0);transform-origin:left;transition:transform .45s var(--ease)}
+.navlink:hover::after,.navlink.is-active::after{transform:scaleX(1)}
+.navlink:hover,.navlink.is-active{color:#F1E6CF!important}
+.logo-mark{transform-box:fill-box;transform-origin:center;transition:transform .9s var(--ease)}
+.logo:hover .logo-mark{transform:rotate(120deg)}
+
+/* ascent meter */
+.hud-bar{position:fixed;top:0;left:0;right:0;height:2px;z-index:60;pointer-events:none}
+.hud-fill{display:block;height:100%;background:var(--honey);transform-origin:left;transform:scaleX(0);box-shadow:0 0 10px var(--honey)}
+.hud-bar.is-reset .hud-fill{background:var(--blood);box-shadow:0 0 10px var(--blood);transition:transform 1.4s var(--ease)}
+.hud{position:fixed;right:16px;bottom:16px;z-index:45;display:flex;flex-direction:column;gap:2px;padding:10px 14px;border:1px solid #3A2E1C;background:rgba(18,14,8,.9);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:#B5A383;opacity:0;transform:translateY(12px);transition:opacity .5s,transform .5s var(--ease),border-color .4s;pointer-events:none}
+.hud.is-on{opacity:1;transform:none}
+.hud-v{display:inline-block;font-size:18px;letter-spacing:.06em;color:#F1E6CF}
+.hud.is-reset{border-color:var(--blood)}
+.hud.is-reset .hud-v,.hud.is-reset .hud-d{color:var(--blood)}
+.anim .hud.is-reset .hud-v{animation:jitter .12s steps(2) 6}
+@media (max-width:720px){.hud{display:none}.hud-bar{height:3px}}
+
+/* reveal */
+.anim .rv{opacity:0;transform:translateY(26px);transition-property:opacity,transform,clip-path,filter;transition-duration:.9s;transition-timing-function:var(--ease);transition-delay:calc(var(--d,0ms) + var(--i,0) * var(--st,90ms))}
+.anim .rv.is-in{opacity:1;transform:none}
+.anim .rv-h{clip-path:inset(0 0 100% 0);transform:translateY(36px);transition-duration:1.1s}
+.anim .rv-h.is-in{clip-path:inset(0 0 0 0)}
+.anim .rv-smoke{transform:none;filter:blur(10px);transition-duration:2.2s;transition-timing-function:ease}
+.anim .rv-smoke.is-in{filter:blur(0)}
+.anim .rv-left{transform:translateX(-18px)}
+.anim .ch{display:inline-block;filter:blur(8px);transform:translateY(.45em);transition-duration:1.1s}
+.anim .ch.is-in{filter:blur(0)}
+.ch-word{display:inline-block;white-space:nowrap}
+
+/* hero */
+.smoke{position:absolute;border-radius:50%;pointer-events:none;background:radial-gradient(circle,rgba(181,163,131,.13),rgba(181,163,131,0) 66%);filter:blur(24px)}
+.smoke-1{width:70vw;height:70vw;max-width:900px;max-height:900px;left:-22%;top:5%}
+.smoke-2{width:60vw;height:60vw;max-width:760px;max-height:760px;right:-20%;top:30%}
+.halo{position:absolute;left:50%;top:150px;width:520px;height:520px;margin-left:-260px;margin-top:-260px;border-radius:50%;pointer-events:none;background:radial-gradient(circle,rgba(232,163,58,.16),rgba(232,163,58,0) 62%)}
+.anim .smoke-1{animation:drift1 28s ease-in-out infinite alternate}
+.anim .smoke-2{animation:drift2 36s ease-in-out infinite alternate}
+.anim .halo{animation:breathe 6s ease-in-out infinite}
+.hexglow{-webkit-mask-image:radial-gradient(circle 200px at var(--mx,-999px) var(--my,-999px),#000,transparent);mask-image:radial-gradient(circle 200px at var(--mx,-999px) var(--my,-999px),#000,transparent)}
+.emblem.alive{animation:float 7s ease-in-out infinite,glow 7s ease-in-out infinite}
+.emblem .eye{transform-box:view-box;transform-origin:120px 130px}
+.emblem.alive .eye{animation:blink 6.5s infinite}
+.emblem.alive .rays{animation:rays 3.2s ease-in-out infinite}
+.emblem .hex-inner{transform-box:view-box;transform-origin:120px 120px}
+.emblem.alive .hex-inner{animation:spin 90s linear infinite}
+.tag2{display:inline-block}
+.anim .tag2{opacity:0;filter:blur(6px);transition:opacity 1.4s ease,filter 1.6s ease,color 2.4s ease;transition-delay:var(--d,0ms);color:#E36B54}
+.anim .tag2.is-in{opacity:1;filter:blur(0);color:#F1E6CF}
+.cue{display:inline-flex;flex-direction:column;align-items:center;gap:10px;font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:#B5A383;text-decoration:none}
+.cue:hover{color:#F1E6CF}
+.cue-line{display:block;width:1px;height:40px;background:linear-gradient(var(--honey),transparent);transform-origin:top}
+.anim .cue-line{animation:drip 2.4s var(--ease) infinite}
+.btn{position:relative;overflow:hidden;transition:box-shadow .35s,transform .35s var(--ease)}
+.btn::after{content:"";position:absolute;top:0;bottom:0;left:-60%;width:40%;background:linear-gradient(100deg,transparent,rgba(255,240,200,.4),transparent);transform:skewX(-20deg);transition:left .8s var(--ease);pointer-events:none}
+.btn:hover::after{left:130%}
+.btn:hover{box-shadow:0 12px 30px -12px rgba(232,163,58,.7);transform:translateY(-2px)}
+
+/* broadcast ticker */
+.ticker-track{display:flex;width:max-content}
+.ticker-set{display:flex;flex-wrap:nowrap;gap:48px;padding:14px 24px;white-space:nowrap}
+.anim .ticker-track{animation:marquee 48s linear infinite}
+.ticker:hover .ticker-track{animation-play-state:paused}
+html:not(.anim) .ticker-track{width:auto;justify-content:center}
+html:not(.anim) .ticker-set{flex-wrap:wrap;justify-content:center;gap:8px 32px;white-space:normal}
+html:not(.anim) .ticker-set[aria-hidden]{display:none}
+.rec{display:inline-block;width:7px;height:7px;margin-right:10px;border-radius:50%;background:var(--blood);vertical-align:1px}
+.anim .rec{animation:caret 1.4s steps(1) infinite}
+.sep{color:#5A4A30}
+
+/* the Wall */
+.tv{position:relative;overflow:hidden}
+.tv::before{content:"";position:absolute;inset:0;pointer-events:none;background:repeating-linear-gradient(to bottom,rgba(0,0,0,0) 0,rgba(0,0,0,0) 2px,rgba(0,0,0,.28) 3px);z-index:1}
+.tv::after{content:"";position:absolute;left:0;right:0;top:-40%;height:40%;pointer-events:none;background:linear-gradient(to bottom,transparent,rgba(232,163,58,.07),transparent);z-index:1}
+.tv-truth::after{background:linear-gradient(to bottom,transparent,rgba(227,107,84,.08),transparent)}
+.anim .tv::after{animation:scan 5.5s linear infinite}
+.anim .rv-tv{opacity:0}
+.anim .tv-wall.is-in{opacity:1;animation:tuneIn .9s var(--ease) both,flicker 7s 1.2s infinite}
+.anim .tv-truth.is-in{opacity:1;animation:glitchIn .7s linear both}
+.redact{position:relative}
+.anim .redact::after{content:"";position:absolute;left:-4px;right:-4px;top:4px;bottom:2px;background:#E36B54;transform-origin:right;animation:unredact .6s var(--ease) both;animation-delay:calc(.55s + var(--i,0) * .16s)}
+
+/* symbols + characters */
+.card{position:relative;overflow:hidden}
+.card::before{content:"";position:absolute;inset:0;pointer-events:none;opacity:0;transition:opacity .4s;background:radial-gradient(circle 220px at var(--cx,50%) var(--cy,0%),rgba(232,163,58,.12),transparent)}
+.card:hover::before{opacity:1}
+.anim .card.rv,.anim .char.rv{transition-property:opacity,transform,translate,border-color,box-shadow;transition-duration:.9s,.9s,.45s,.4s,.45s;transition-delay:calc(var(--i,0) * var(--st,90ms)),calc(var(--i,0) * var(--st,90ms)),0s,0s,0s}
+.card{transition:translate .45s var(--ease),border-color .4s,box-shadow .45s}
+.card:hover{translate:0 -6px;border-color:var(--honey)!important;box-shadow:0 22px 40px -24px rgba(232,163,58,.55)}
+.card svg{transition:filter .4s}
+.card:hover svg{filter:drop-shadow(0 0 6px rgba(232,163,58,.7))}
+.char{position:relative;transition:translate .45s var(--ease)}
+.char:hover{translate:0 -4px}
+.char-line{position:absolute;left:0;right:0;top:-2px;height:2px;background:var(--honey);transform-origin:left}
+.anim .char-line{transform:scaleX(0);transition:transform 1.2s var(--ease);transition-delay:calc(var(--i,0) * var(--st,90ms) + 250ms)}
+.anim .is-in > .char-line{transform:scaleX(1)}
+.anim .glitch-name{animation:glitchText 5s infinite}
+.anim .flag{animation:flag 4.5s steps(1,end) infinite}
+
+/* plot */
+.anim .act li.rv{transition-delay:calc(var(--i,0) * var(--st,90ms) + 450ms + var(--j,0) * 110ms)}
+.honey polygon{transition:fill 1.2s ease}
+.honey.alive polygon{fill:rgba(232,163,58,.14)}
+
+/* finale */
+.swarm{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
+.anim .w{opacity:.14;transition:opacity .6s ease,color .8s ease,text-shadow .8s ease}
+.anim .w.lit{opacity:1}
+.anim .w-honey.lit{color:var(--honey);text-shadow:0 0 24px rgba(232,163,58,.45)}
+.anim .report .rv{transition-delay:calc(350ms + var(--i,0) * var(--st,90ms))}
+.glitching{display:inline-block;color:var(--blood)!important;text-shadow:-2px 0 #4FC1C9,2px 0 var(--blood);transform:translateX(2px)}
+.cursor::after{content:"\258C";margin-left:6px}
+.anim .cursor::after{animation:caret 1s steps(1) infinite}
+
+@keyframes drift1{to{transform:translate(18vw,-6vh) scale(1.15)}}
+@keyframes drift2{to{transform:translate(-16vw,8vh) scale(1.2)}}
+@keyframes breathe{0%,100%{opacity:.7;transform:scale(.94)}50%{opacity:1;transform:scale(1.06)}}
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
+@keyframes glow{0%,100%{filter:drop-shadow(0 0 4px rgba(232,163,58,.25))}50%{filter:drop-shadow(0 0 16px rgba(232,163,58,.55))}}
+@keyframes blink{0%,91%,97%,100%{transform:scaleY(1)}94%{transform:scaleY(.06)}}
+@keyframes rays{0%,100%{opacity:.35}50%{opacity:1}}
+@keyframes spin{to{transform:rotate(360deg)}}
+@keyframes drip{0%{transform:scaleY(0);opacity:1}60%{transform:scaleY(1);opacity:1}100%{transform:scaleY(1);opacity:0}}
+@keyframes marquee{to{transform:translateX(-50%)}}
+@keyframes caret{0%{opacity:1}50%{opacity:0}}
+@keyframes scan{to{top:110%}}
+@keyframes tuneIn{0%{opacity:0;transform:scale(1,.004);filter:brightness(4)}35%{opacity:1;transform:scale(1,.004);filter:brightness(4)}70%{transform:scale(1,1.015);filter:brightness(1.5)}100%{opacity:1;transform:none;filter:none}}
+@keyframes flicker{0%,93%,95%,97%,100%{opacity:1}94%{opacity:.82}96%{opacity:.9}}
+@keyframes glitchIn{0%{opacity:0;transform:translateX(-14px) skewX(10deg);clip-path:inset(0 0 72% 0)}12%{opacity:1;transform:translateX(12px);clip-path:inset(42% 0 18% 0)}24%{transform:translateX(-7px) skewX(-5deg);clip-path:inset(8% 0 58% 0)}36%{transform:translateX(5px);clip-path:inset(62% 0 4% 0)}48%{transform:translateX(-3px);clip-path:inset(0 0 0 0)}60%{transform:translateX(2px)}100%{opacity:1;transform:none;clip-path:inset(0 0 0 0)}}
+@keyframes unredact{from{transform:scaleX(1)}to{transform:scaleX(0)}}
+@keyframes glitchText{0%,90%,100%{text-shadow:none;transform:none}91%{text-shadow:-3px 0 #E36B54,3px 0 #4FC1C9;transform:translateX(2px)}93%{text-shadow:2px 0 #E36B54,-2px 0 #4FC1C9;transform:translateX(-2px) skewX(-6deg)}95%{text-shadow:none;transform:none}}
+@keyframes flag{0%,82%,88%,91%,100%{color:var(--honey)}84%,90%{color:#E36B54}}
+@keyframes jitter{0%{transform:translateX(-2px)}50%{transform:translateX(2px)}}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
 </style>
 </helmet>
-<div style="min-height: 100vh; background: #0D0A06; color: #F1E6CF; font-family: 'Spectral', Georgia, serif; font-size: 18px; line-height: 1.6">
+<div style="--honey: {{accent}}; min-height: 100vh; background: #0D0A06; color: #F1E6CF; font-family: 'Spectral', Georgia, serif; font-size: 18px; line-height: 1.6">
 
-<header style="border-bottom: 1px solid #3A2E1C">
+<div class="hud-bar" aria-hidden="true"><span class="hud-fill"></span></div>
+<div class="hud" aria-hidden="true"><span>Ascent index</span><span class="hud-v"></span><span class="hud-d"></span></div>
+
+<header class="site-header" style="border-bottom: 1px solid #3A2E1C">
 <nav aria-label="Primary" style="max-width: 1180px; margin: 0 auto; padding: 12px 24px; display: flex; flex-wrap: wrap; gap: 8px 32px; align-items: center; justify-content: space-between">
-<a href="#top" style="display: inline-flex; align-items: center; gap: 12px; min-height: 44px; text-decoration: none; color: #F1E6CF; font-family: 'Cinzel', serif; font-weight: 700; font-size: 18px; letter-spacing: 0.24em">
-<svg aria-hidden="true" width="22" height="24" viewBox="0 0 22 24"><polygon points="11,1 21,6.75 21,17.25 11,23 1,17.25 1,6.75" fill="none" stroke="{{accent}}" stroke-width="2"></polygon><circle cx="11" cy="12" r="3" fill="{{accent}}"></circle></svg>
+<a href="#top" class="logo" style="display: inline-flex; align-items: center; gap: 12px; min-height: 44px; text-decoration: none; color: #F1E6CF; font-family: 'Cinzel', serif; font-weight: 700; font-size: 18px; letter-spacing: 0.24em">
+<svg aria-hidden="true" width="22" height="24" viewBox="0 0 22 24"><g class="logo-mark"><polygon points="11,1 21,6.75 21,17.25 11,23 1,17.25 1,6.75" fill="none" stroke="{{accent}}" stroke-width="2"></polygon><circle cx="11" cy="12" r="3" fill="{{accent}}"></circle></g></svg>
 <span>THE APIARY</span>
 </a>
 <div style="display: flex; flex-wrap: wrap; gap: 0 24px; font-family: 'IBM Plex Mono', monospace; font-size: 13px; letter-spacing: 0.12em; text-transform: uppercase">
-<a href="#premise" style="display: inline-flex; align-items: center; min-height: 44px; text-decoration: none; color: #B5A383">Premise</a>
-<a href="#wall" style="display: inline-flex; align-items: center; min-height: 44px; text-decoration: none; color: #B5A383">The Wall</a>
-<a href="#symbols" style="display: inline-flex; align-items: center; min-height: 44px; text-decoration: none; color: #B5A383">Symbols</a>
-<a href="#characters" style="display: inline-flex; align-items: center; min-height: 44px; text-decoration: none; color: #B5A383">Characters</a>
-<a href="#plot" style="display: inline-flex; align-items: center; min-height: 44px; text-decoration: none; color: #B5A383">Plot</a>
+<a href="#premise" class="navlink" style="display: inline-flex; align-items: center; min-height: 44px; text-decoration: none; color: #B5A383">Premise</a>
+<a href="#wall" class="navlink" style="display: inline-flex; align-items: center; min-height: 44px; text-decoration: none; color: #B5A383">The Wall</a>
+<a href="#symbols" class="navlink" style="display: inline-flex; align-items: center; min-height: 44px; text-decoration: none; color: #B5A383">Symbols</a>
+<a href="#characters" class="navlink" style="display: inline-flex; align-items: center; min-height: 44px; text-decoration: none; color: #B5A383">Characters</a>
+<a href="#plot" class="navlink" style="display: inline-flex; align-items: center; min-height: 44px; text-decoration: none; color: #B5A383">Plot</a>
 </div>
 </nav>
 </header>
 
-<section id="top" style="position: relative; overflow: hidden; padding: 88px 0 104px; border-bottom: 1px solid #3A2E1C">
-<svg aria-hidden="true" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; opacity: 0.09"><defs><pattern id="hexgrid" width="56" height="100" patternUnits="userSpaceOnUse"><path d="M28 66L0 50L0 16L28 0L56 16L56 50L28 66L28 100" fill="none" stroke="#E8A33A" stroke-width="1"></path></pattern></defs><rect width="100%" height="100%" fill="url(#hexgrid)"></rect></svg>
+<section id="top" class="hero" style="position: relative; overflow: hidden; padding: 88px 0 136px; border-bottom: 1px solid #3A2E1C">
+<svg aria-hidden="true" data-parallax="0.3" style="position: absolute; top: -120px; left: 0; width: 100%; height: calc(100% + 240px); opacity: 0.09"><defs><pattern id="hexgrid" width="56" height="100" patternUnits="userSpaceOnUse"><path d="M28 66L0 50L0 16L28 0L56 16L56 50L28 66L28 100" fill="none" stroke="#E8A33A" stroke-width="1"></path></pattern></defs><rect width="100%" height="100%" fill="url(#hexgrid)"></rect></svg>
+<svg aria-hidden="true" class="hexglow" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; opacity: 0.55"><defs><pattern id="hexgridglow" width="56" height="100" patternUnits="userSpaceOnUse"><path d="M28 66L0 50L0 16L28 0L56 16L56 50L28 66L28 100" fill="none" stroke="#F6C46E" stroke-width="1.2"></path></pattern></defs><rect width="100%" height="100%" fill="url(#hexgridglow)"></rect></svg>
+<div class="smoke smoke-1" aria-hidden="true"></div>
+<div class="smoke smoke-2" aria-hidden="true"></div>
+<div class="halo" aria-hidden="true"></div>
 <div style="position: relative; max-width: 1180px; margin: 0 auto; padding: 0 24px; display: flex; flex-direction: column; align-items: center; text-align: center">
-<svg role="img" aria-label="The Apiary emblem: an eye inside a triangle, inside a hexagon" width="200" height="200" viewBox="0 0 240 240">
+<svg role="img" class="emblem" data-draw data-dur="1300" data-step="150" aria-label="The Apiary emblem: an eye inside a triangle, inside a hexagon" width="200" height="200" viewBox="0 0 240 240">
 <polygon points="120,10 215.3,65 215.3,175 120,230 24.7,175 24.7,65" fill="none" stroke="{{accent}}" stroke-width="2"></polygon>
-<polygon points="120,26 201.4,73 201.4,167 120,214 38.6,167 38.6,73" fill="none" stroke="{{accent}}" stroke-width="1" opacity="0.45"></polygon>
+<polygon class="hex-inner" points="120,26 201.4,73 201.4,167 120,214 38.6,167 38.6,73" fill="none" stroke="{{accent}}" stroke-width="1" opacity="0.45"></polygon>
 <polygon points="120,58 180,162 60,162" fill="none" stroke="#F1E6CF" stroke-width="2"></polygon>
+<g class="eye">
 <path d="M88 130 Q120 102 152 130 Q120 158 88 130 Z" fill="none" stroke="#F1E6CF" stroke-width="2"></path>
-<circle cx="120" cy="130" r="9" fill="{{accent}}"></circle>
-<path d="M120 36 V48 M94 44 L100 54 M146 44 L140 54 M72 58 L82 64 M168 58 L158 64" stroke="{{accent}}" stroke-width="2" stroke-linecap="round"></path>
+<circle class="pupil" cx="120" cy="130" r="9" fill="{{accent}}"></circle>
+</g>
+<path class="rays" d="M120 36 V48 M94 44 L100 54 M146 44 L140 54 M72 58 L82 64 M168 58 L158 64" fill="none" stroke="{{accent}}" stroke-width="2" stroke-linecap="round"></path>
 <path d="M60 186 H180" stroke="#F1E6CF" stroke-width="1" opacity="0.5"></path>
 </svg>
-<p style="margin: 32px 0 0; font-family: 'IBM Plex Mono', monospace; font-size: 13px; letter-spacing: 0.2em; text-transform: uppercase; color: {{accent}}">Ascent cycle 0412 · Sector 7-C · 400 m below</p>
-<h1 style="margin: 16px 0 16px; font-family: 'Cinzel', serif; font-weight: 700; font-size: clamp(52px, 11vw, 136px); line-height: 1; letter-spacing: 0.08em">THE APIARY</h1>
-<p style="margin: 0; max-width: 640px; font-style: italic; font-size: clamp(20px, 2.6vw, 28px); line-height: 1.4; color: #F1E6CF">They told you to rise. They were raising you.</p>
-<div style="margin-top: 40px; display: flex; flex-wrap: wrap; gap: 16px; justify-content: center">
-<a href="#premise" style="display: inline-flex; align-items: center; justify-content: center; min-height: 52px; padding: 0 28px; background: {{accent}}; color: #0D0A06; text-decoration: none; font-family: 'IBM Plex Mono', monospace; font-weight: 500; font-size: 14px; letter-spacing: 0.14em; text-transform: uppercase">Enter the hive</a>
-<a href="#wall" style="display: inline-flex; align-items: center; justify-content: center; min-height: 52px; padding: 0 28px; border: 1px solid {{accent}}; color: #F1E6CF; text-decoration: none; font-family: 'IBM Plex Mono', monospace; font-weight: 500; font-size: 14px; letter-spacing: 0.14em; text-transform: uppercase">Look behind the wall</a>
+<p class="rv" data-d="300" data-scramble style="margin: 32px 0 0; font-family: 'IBM Plex Mono', monospace; font-size: 13px; letter-spacing: 0.2em; text-transform: uppercase; color: {{accent}}">Ascent cycle 0412 · Sector 7-C · 400 m below</p>
+<h1 aria-label="THE APIARY" data-stagger="55" data-d="550" style="margin: 16px 0 16px; font-family: 'Cinzel', serif; font-weight: 700; font-size: clamp(52px, 11vw, 136px); line-height: 1; letter-spacing: 0.08em"><span aria-hidden="true" class="ch-word"><span class="rv ch">T</span><span class="rv ch">H</span><span class="rv ch">E</span></span> <span aria-hidden="true" class="ch-word"><span class="rv ch">A</span><span class="rv ch">P</span><span class="rv ch">I</span><span class="rv ch">A</span><span class="rv ch">R</span><span class="rv ch">Y</span></span></h1>
+<p style="margin: 0; max-width: 640px; font-style: italic; font-size: clamp(20px, 2.6vw, 28px); line-height: 1.4; color: #F1E6CF"><span class="rv" data-d="1150" style="display: inline-block">They told you to rise.</span> <span class="tag2" data-d="1900">They were raising you.</span></p>
+<div class="rv" data-d="2100" style="margin-top: 40px; display: flex; flex-wrap: wrap; gap: 16px; justify-content: center">
+<a href="#premise" class="btn" style="display: inline-flex; align-items: center; justify-content: center; min-height: 52px; padding: 0 28px; background: {{accent}}; color: #0D0A06; text-decoration: none; font-family: 'IBM Plex Mono', monospace; font-weight: 500; font-size: 14px; letter-spacing: 0.14em; text-transform: uppercase">Enter the hive</a>
+<a href="#wall" class="btn" style="display: inline-flex; align-items: center; justify-content: center; min-height: 52px; padding: 0 28px; border: 1px solid {{accent}}; color: #F1E6CF; text-decoration: none; font-family: 'IBM Plex Mono', monospace; font-weight: 500; font-size: 14px; letter-spacing: 0.14em; text-transform: uppercase">Look behind the wall</a>
 </div>
+</div>
+<div style="position: absolute; left: 0; right: 0; bottom: 24px; display: flex; justify-content: center">
+<a href="#premise" class="cue rv" data-d="2600" aria-label="Scroll to the premise"><span>Begin the ascent</span><span class="cue-line"></span></a>
 </div>
 </section>
 
-<div style="border-bottom: 1px solid #3A2E1C; background: #120E08">
-<div style="max-width: 1180px; margin: 0 auto; padding: 14px 24px; display: flex; flex-wrap: wrap; gap: 8px 32px; justify-content: center; font-family: 'IBM Plex Mono', monospace; font-size: 12px; letter-spacing: 0.16em; text-transform: uppercase; color: #B5A383">
+<div class="ticker" style="border-bottom: 1px solid #3A2E1C; background: #120E08; overflow: hidden">
+<div class="ticker-track" style="font-family: 'IBM Plex Mono', monospace; font-size: 12px; letter-spacing: 0.16em; text-transform: uppercase; color: #B5A383">
+<div class="ticker-set">
 <span>Ascent index <span style="color: {{accent}}">61.4%</span></span>
+<span class="sep" aria-hidden="true">⬡</span>
 <span>Surface restoration on schedule</span>
+<span class="sep" aria-hidden="true">⬡</span>
 <span>Quotas are gratitude</span>
+<span class="sep" aria-hidden="true">⬡</span>
 <span>Smoke cycle 03:00</span>
-<span>The Architect is watching</span>
+<span class="sep" aria-hidden="true">⬡</span>
+<span><span class="rec" aria-hidden="true"></span>The Architect is watching</span>
+<span class="sep" aria-hidden="true">⬡</span>
+</div>
+<div class="ticker-set" aria-hidden="true">
+<span>Ascent index <span style="color: {{accent}}">61.4%</span></span>
+<span class="sep">⬡</span>
+<span>Surface restoration on schedule</span>
+<span class="sep">⬡</span>
+<span>Quotas are gratitude</span>
+<span class="sep">⬡</span>
+<span>Smoke cycle 03:00</span>
+<span class="sep">⬡</span>
+<span><span class="rec"></span>The Architect is watching</span>
+<span class="sep">⬡</span>
+</div>
 </div>
 </div>
 
 <section id="premise" style="padding: 112px 0; border-bottom: 1px solid #3A2E1C">
 <div style="max-width: 1180px; margin: 0 auto; padding: 0 24px; display: flex; flex-wrap: wrap; gap: 48px 80px">
 <div style="flex: 1 1 360px; min-width: 0">
-<p style="margin: 0 0 16px; font-family: 'IBM Plex Mono', monospace; font-size: 13px; letter-spacing: 0.2em; text-transform: uppercase; color: {{accent}}">The premise</p>
-<h2 style="margin: 0; font-family: 'Cinzel', serif; font-weight: 700; font-size: clamp(32px, 4vw, 48px); line-height: 1.15">The surface is healing. You just have to keep working.</h2>
+<p class="rv" data-scramble style="margin: 0 0 16px; font-family: 'IBM Plex Mono', monospace; font-size: 13px; letter-spacing: 0.2em; text-transform: uppercase; color: {{accent}}">The premise</p>
+<h2 class="rv rv-h" data-d="120" style="margin: 0; font-family: 'Cinzel', serif; font-weight: 700; font-size: clamp(32px, 4vw, 48px); line-height: 1.15">The surface is healing. You just have to keep working.</h2>
 </div>
-<div style="flex: 1 1 480px; min-width: 0; display: flex; flex-direction: column; gap: 20px">
-<p style="margin: 0">After a collapse no one inside remembers clearly, the survivors live in the Apiary: a hexagonal complex hundreds of meters underground. Every resident works for the Ascent Project. Hit your quotas, and humanity returns to the surface.</p>
-<p style="margin: 0">An AI called the Architect sets the targets, grades every resident, and speaks through a vast screen called the Wall, which shows the surface healing a little more each year.</p>
-<p style="margin: 0; color: #B5A383">None of it is real. Above ground, a small group called the Keepers lives on for centuries, sustained by organs, blood and marrow taken from below. The residents were never workers. They are livestock with job titles.</p>
+<div data-stagger="160" data-d="200" style="flex: 1 1 480px; min-width: 0; display: flex; flex-direction: column; gap: 20px">
+<p class="rv" style="margin: 0">After a collapse no one inside remembers clearly, the survivors live in the Apiary: a hexagonal complex hundreds of meters underground. Every resident works for the Ascent Project. Hit your quotas, and humanity returns to the surface.</p>
+<p class="rv" style="margin: 0">An AI called the Architect sets the targets, grades every resident, and speaks through a vast screen called the Wall, which shows the surface healing a little more each year.</p>
+<p class="rv rv-smoke" style="margin: 0; color: #B5A383">None of it is real. Above ground, a small group called the Keepers lives on for centuries, sustained by organs, blood and marrow taken from below. The residents were never workers. They are livestock with job titles.</p>
 </div>
 </div>
 </section>
 
 <section id="wall" style="padding: 112px 0; border-bottom: 1px solid #3A2E1C; background: #120E08">
 <div style="max-width: 1180px; margin: 0 auto; padding: 0 24px">
-<p style="margin: 0 0 16px; font-family: 'IBM Plex Mono', monospace; font-size: 13px; letter-spacing: 0.2em; text-transform: uppercase; color: {{accent}}">The Wall</p>
-<h2 style="margin: 0 0 40px; font-family: 'Cinzel', serif; font-weight: 700; font-size: clamp(32px, 4vw, 48px); line-height: 1.15">What it shows. What it hides.</h2>
+<p class="rv" data-scramble style="margin: 0 0 16px; font-family: 'IBM Plex Mono', monospace; font-size: 13px; letter-spacing: 0.2em; text-transform: uppercase; color: {{accent}}">The Wall</p>
+<h2 class="rv rv-h" data-d="120" style="margin: 0 0 40px; font-family: 'Cinzel', serif; font-weight: 700; font-size: clamp(32px, 4vw, 48px); line-height: 1.15">What it shows. What it hides.</h2>
 
 <sc-if value="{{isWall}}" hint-placeholder-val="{{ true }}">
 <div role="group" aria-label="Choose view" style="display: flex; flex-wrap: wrap; gap: 12px; margin-bottom: 24px">
-<button type="button" aria-pressed="true" onClick="{{showWall}}" style="min-height: 48px; padding: 0 24px; background: {{accent}}; color: #0D0A06; border: 1px solid {{accent}}; cursor: pointer; font-family: 'IBM Plex Mono', monospace; font-weight: 500; font-size: 13px; letter-spacing: 0.14em; text-transform: uppercase">What the Wall shows</button>
-<button type="button" aria-pressed="false" onClick="{{showTruth}}" style="min-height: 48px; padding: 0 24px; background: transparent; color: #F1E6CF; border: 1px solid #5A4A30; cursor: pointer; font-family: 'IBM Plex Mono', monospace; font-weight: 500; font-size: 13px; letter-spacing: 0.14em; text-transform: uppercase">What's behind it</button>
+<button type="button" class="btn" aria-pressed="true" onClick="{{showWall}}" style="min-height: 48px; padding: 0 24px; background: {{accent}}; color: #0D0A06; border: 1px solid {{accent}}; cursor: pointer; font-family: 'IBM Plex Mono', monospace; font-weight: 500; font-size: 13px; letter-spacing: 0.14em; text-transform: uppercase">What the Wall shows</button>
+<button type="button" class="btn" aria-pressed="false" onClick="{{showTruth}}" style="min-height: 48px; padding: 0 24px; background: transparent; color: #F1E6CF; border: 1px solid #5A4A30; cursor: pointer; font-family: 'IBM Plex Mono', monospace; font-weight: 500; font-size: 13px; letter-spacing: 0.14em; text-transform: uppercase">What's behind it</button>
 </div>
-<div style="border: 1px solid {{accent}}; background: #0D0A06; padding: 32px; font-family: 'IBM Plex Mono', monospace; font-size: 15px; line-height: 1.7">
-<p style="margin: 0 0 24px; font-size: 12px; letter-spacing: 0.2em; text-transform: uppercase; color: {{accent}}">The Architect // Resident broadcast</p>
+<div class="tv tv-wall rv-tv" style="border: 1px solid {{accent}}; background: #0D0A06; padding: 32px; font-family: 'IBM Plex Mono', monospace; font-size: 15px; line-height: 1.7">
+<p data-scramble data-d="500" style="margin: 0 0 24px; font-size: 12px; letter-spacing: 0.2em; text-transform: uppercase; color: {{accent}}">The Architect // Resident broadcast</p>
 <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 24px">
-<div><p style="margin: 0; font-size: 12px; letter-spacing: 0.14em; text-transform: uppercase; color: #B5A383">Ascent index</p><p style="margin: 4px 0 0; font-size: 28px; color: #F1E6CF">61.4% and rising</p></div>
+<div><p style="margin: 0; font-size: 12px; letter-spacing: 0.14em; text-transform: uppercase; color: #B5A383">Ascent index</p><p style="margin: 4px 0 0; font-size: 28px; color: #F1E6CF"><span data-count data-d="500">61.4</span>% and rising</p></div>
 <div><p style="margin: 0; font-size: 12px; letter-spacing: 0.14em; text-transform: uppercase; color: #B5A383">Surface</p><p style="margin: 4px 0 0; font-size: 28px; color: #F1E6CF">Restoring on schedule</p></div>
-<div><p style="margin: 0; font-size: 12px; letter-spacing: 0.14em; text-transform: uppercase; color: #B5A383">Your quota</p><p style="margin: 4px 0 0; font-size: 28px; color: #F1E6CF">412 / 500 units</p></div>
+<div><p style="margin: 0; font-size: 12px; letter-spacing: 0.14em; text-transform: uppercase; color: #B5A383">Your quota</p><p style="margin: 4px 0 0; font-size: 28px; color: #F1E6CF"><span data-count data-d="500">412</span> / 500 units</p></div>
 <div><p style="margin: 0; font-size: 12px; letter-spacing: 0.14em; text-transform: uppercase; color: #B5A383">Your rank</p><p style="margin: 4px 0 0; font-size: 28px; color: #F1E6CF">Rough Ashlar, rising</p></div>
 </div>
 <p style="margin: 28px 0 0; color: #B5A383">Work is ascent. Ascent is gratitude. Breathe deeply during Smoke cycle.</p>
@@ -108,16 +283,16 @@ button:focus-visible,a:focus-visible{outline:2px solid #F6C46E;outline-offset:3p
 
 <sc-if value="{{isTruth}}" hint-placeholder-val="{{ false }}">
 <div role="group" aria-label="Choose view" style="display: flex; flex-wrap: wrap; gap: 12px; margin-bottom: 24px">
-<button type="button" aria-pressed="false" onClick="{{showWall}}" style="min-height: 48px; padding: 0 24px; background: transparent; color: #F1E6CF; border: 1px solid #5A4A30; cursor: pointer; font-family: 'IBM Plex Mono', monospace; font-weight: 500; font-size: 13px; letter-spacing: 0.14em; text-transform: uppercase">What the Wall shows</button>
-<button type="button" aria-pressed="true" onClick="{{showTruth}}" style="min-height: 48px; padding: 0 24px; background: #E36B54; color: #0D0A06; border: 1px solid #E36B54; cursor: pointer; font-family: 'IBM Plex Mono', monospace; font-weight: 500; font-size: 13px; letter-spacing: 0.14em; text-transform: uppercase">What's behind it</button>
+<button type="button" class="btn" aria-pressed="false" onClick="{{showWall}}" style="min-height: 48px; padding: 0 24px; background: transparent; color: #F1E6CF; border: 1px solid #5A4A30; cursor: pointer; font-family: 'IBM Plex Mono', monospace; font-weight: 500; font-size: 13px; letter-spacing: 0.14em; text-transform: uppercase">What the Wall shows</button>
+<button type="button" class="btn" aria-pressed="true" onClick="{{showTruth}}" style="min-height: 48px; padding: 0 24px; background: #E36B54; color: #0D0A06; border: 1px solid #E36B54; cursor: pointer; font-family: 'IBM Plex Mono', monospace; font-weight: 500; font-size: 13px; letter-spacing: 0.14em; text-transform: uppercase">What's behind it</button>
 </div>
-<div style="border: 1px solid #E36B54; background: #0D0A06; padding: 32px; font-family: 'IBM Plex Mono', monospace; font-size: 15px; line-height: 1.7">
-<p style="margin: 0 0 24px; font-size: 12px; letter-spacing: 0.2em; text-transform: uppercase; color: #E36B54">Keeper ledger // Not for broadcast</p>
-<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 24px">
-<div><p style="margin: 0; font-size: 12px; letter-spacing: 0.14em; text-transform: uppercase; color: #B5A383">Ascent index</p><p style="margin: 4px 0 0; font-size: 28px; color: #F1E6CF">Resets every cycle</p></div>
-<div><p style="margin: 0; font-size: 12px; letter-spacing: 0.14em; text-transform: uppercase; color: #B5A383">Surface</p><p style="margin: 4px 0 0; font-size: 28px; color: #F1E6CF">Green. Occupied.</p></div>
-<div><p style="margin: 0; font-size: 12px; letter-spacing: 0.14em; text-transform: uppercase; color: #B5A383">Your quota</p><p style="margin: 4px 0 0; font-size: 28px; color: #F1E6CF">Make-work. Discarded.</p></div>
-<div><p style="margin: 0; font-size: 12px; letter-spacing: 0.14em; text-transform: uppercase; color: #B5A383">Your rank</p><p style="margin: 4px 0 0; font-size: 28px; color: #F1E6CF">Batch 7-C. Harvest in 3 cycles.</p></div>
+<div class="tv tv-truth rv-tv" style="border: 1px solid #E36B54; background: #0D0A06; padding: 32px; font-family: 'IBM Plex Mono', monospace; font-size: 15px; line-height: 1.7">
+<p data-scramble data-d="300" style="margin: 0 0 24px; font-size: 12px; letter-spacing: 0.2em; text-transform: uppercase; color: #E36B54">Keeper ledger // Not for broadcast</p>
+<div data-stagger="160" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 24px">
+<div><p style="margin: 0; font-size: 12px; letter-spacing: 0.14em; text-transform: uppercase; color: #B5A383">Ascent index</p><p class="redact" style="margin: 4px 0 0; font-size: 28px; color: #F1E6CF">Resets every cycle</p></div>
+<div><p style="margin: 0; font-size: 12px; letter-spacing: 0.14em; text-transform: uppercase; color: #B5A383">Surface</p><p class="redact" style="margin: 4px 0 0; font-size: 28px; color: #F1E6CF">Green. Occupied.</p></div>
+<div><p style="margin: 0; font-size: 12px; letter-spacing: 0.14em; text-transform: uppercase; color: #B5A383">Your quota</p><p class="redact" style="margin: 4px 0 0; font-size: 28px; color: #F1E6CF">Make-work. Discarded.</p></div>
+<div><p style="margin: 0; font-size: 12px; letter-spacing: 0.14em; text-transform: uppercase; color: #B5A383">Your rank</p><p class="redact" style="margin: 4px 0 0; font-size: 28px; color: #F1E6CF">Batch 7-C. Harvest in 3 cycles.</p></div>
 </div>
 <p style="margin: 28px 0 0; color: #E36B54">Smoke keeps the colony calm and gorged. A colony that reaches the surface stops making honey.</p>
 </div>
@@ -127,36 +302,36 @@ button:focus-visible,a:focus-visible{outline:2px solid #F6C46E;outline-offset:3p
 
 <section id="symbols" style="padding: 112px 0; border-bottom: 1px solid #3A2E1C">
 <div style="max-width: 1180px; margin: 0 auto; padding: 0 24px">
-<p style="margin: 0 0 16px; font-family: 'IBM Plex Mono', monospace; font-size: 13px; letter-spacing: 0.2em; text-transform: uppercase; color: {{accent}}">The symbols</p>
-<h2 style="margin: 0 0 48px; font-family: 'Cinzel', serif; font-weight: 700; font-size: clamp(32px, 4vw, 48px); line-height: 1.15">Five old stories. One machine.</h2>
-<div style="display: flex; flex-wrap: wrap; gap: 20px">
+<p class="rv" data-scramble style="margin: 0 0 16px; font-family: 'IBM Plex Mono', monospace; font-size: 13px; letter-spacing: 0.2em; text-transform: uppercase; color: {{accent}}">The symbols</p>
+<h2 class="rv rv-h" data-d="120" style="margin: 0 0 48px; font-family: 'Cinzel', serif; font-weight: 700; font-size: clamp(32px, 4vw, 48px); line-height: 1.15">Five old stories. One machine.</h2>
+<div data-stagger="110" style="display: flex; flex-wrap: wrap; gap: 20px">
 
-<div style="flex: 1 1 200px; min-width: 0; border: 1px solid #3A2E1C; background: #120E08; padding: 28px 24px; display: flex; flex-direction: column; gap: 14px">
-<svg aria-hidden="true" width="48" height="48" viewBox="0 0 48 48" fill="none" stroke="{{accent}}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 42 L44 12"></path><circle cx="27" cy="18" r="7"></circle><path d="M10 14 A9 9 0 1 0 10 26"></path><path d="M10 26 L6 23 M10 26 L13 22"></path></svg>
+<div class="card rv" style="flex: 1 1 200px; min-width: 0; border: 1px solid #3A2E1C; background: #120E08; padding: 28px 24px; display: flex; flex-direction: column; gap: 14px">
+<svg aria-hidden="true" data-draw data-d="250" data-dur="1100" width="48" height="48" viewBox="0 0 48 48" fill="none" stroke="{{accent}}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 42 L44 12"></path><circle cx="27" cy="18" r="7"></circle><path d="M10 14 A9 9 0 1 0 10 26"></path><path d="M10 26 L6 23 M10 26 L13 22"></path></svg>
 <h3 style="margin: 0; font-family: 'Cinzel', serif; font-size: 22px">Sisyphus</h3>
 <p style="margin: 0; font-size: 16px; color: #B5A383">Quotas climb all year. Then a staged quake or contamination wipes the Ascent Index to zero. Push the stone again.</p>
 </div>
 
-<div style="flex: 1 1 200px; min-width: 0; border: 1px solid #3A2E1C; background: #120E08; padding: 28px 24px; display: flex; flex-direction: column; gap: 14px">
-<svg aria-hidden="true" width="48" height="48" viewBox="0 0 48 48" fill="none" stroke="{{accent}}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 26 Q24 8 44 26 Q24 44 4 26 Z"></path><circle cx="24" cy="26" r="6"></circle><path d="M24 4 V9 M12 7 L15 12 M36 7 L33 12"></path></svg>
+<div class="card rv" style="flex: 1 1 200px; min-width: 0; border: 1px solid #3A2E1C; background: #120E08; padding: 28px 24px; display: flex; flex-direction: column; gap: 14px">
+<svg aria-hidden="true" data-draw data-d="250" data-dur="1100" width="48" height="48" viewBox="0 0 48 48" fill="none" stroke="{{accent}}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 26 Q24 8 44 26 Q24 44 4 26 Z"></path><circle cx="24" cy="26" r="6"></circle><path d="M24 4 V9 M12 7 L15 12 M36 7 L33 12"></path></svg>
 <h3 style="margin: 0; font-family: 'Cinzel', serif; font-size: 22px">Cassandra</h3>
 <p style="margin: 0; font-size: 16px; color: #B5A383">The Architect punishes accurate prediction. Forecast a setback correctly and you are flagged pattern-disruptive, then sent to the Infirmary.</p>
 </div>
 
-<div style="flex: 1 1 200px; min-width: 0; border: 1px solid #3A2E1C; background: #120E08; padding: 28px 24px; display: flex; flex-direction: column; gap: 14px">
-<svg aria-hidden="true" width="48" height="48" viewBox="0 0 48 48" fill="none" stroke="{{accent}}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 44 V22 Q24 2 44 22 V44"></path><path d="M30 42 Q25 36 30 30 Q35 36 30 42 Z"></path><circle cx="14" cy="28" r="3"></circle><path d="M14 31 V40 M10 35 H18"></path></svg>
+<div class="card rv" style="flex: 1 1 200px; min-width: 0; border: 1px solid #3A2E1C; background: #120E08; padding: 28px 24px; display: flex; flex-direction: column; gap: 14px">
+<svg aria-hidden="true" data-draw data-d="250" data-dur="1100" width="48" height="48" viewBox="0 0 48 48" fill="none" stroke="{{accent}}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 44 V22 Q24 2 44 22 V44"></path><path d="M30 42 Q25 36 30 30 Q35 36 30 42 Z"></path><circle cx="14" cy="28" r="3"></circle><path d="M14 31 V40 M10 35 H18"></path></svg>
 <h3 style="margin: 0; font-family: 'Cinzel', serif; font-size: 22px">The Cave</h3>
 <p style="margin: 0; font-size: 16px; color: #B5A383">The Wall is the fire and the shadows: a healing sky rendered in real time, never filmed. The prisoners call it hope.</p>
 </div>
 
-<div style="flex: 1 1 200px; min-width: 0; border: 1px solid #3A2E1C; background: #120E08; padding: 28px 24px; display: flex; flex-direction: column; gap: 14px">
-<svg aria-hidden="true" width="48" height="48" viewBox="0 0 48 48" fill="none" stroke="{{accent}}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 40 Q9 10 24 7 Q39 10 38 40"></path><path d="M11 31 H37 M11 23 H37 M14 15 H34 M6 40 H42"></path><path d="M20 40 A4 4 0 0 1 28 40"></path></svg>
+<div class="card rv" style="flex: 1 1 200px; min-width: 0; border: 1px solid #3A2E1C; background: #120E08; padding: 28px 24px; display: flex; flex-direction: column; gap: 14px">
+<svg aria-hidden="true" data-draw data-d="250" data-dur="1100" width="48" height="48" viewBox="0 0 48 48" fill="none" stroke="{{accent}}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 40 Q9 10 24 7 Q39 10 38 40"></path><path d="M11 31 H37 M11 23 H37 M14 15 H34 M6 40 H42"></path><path d="M20 40 A4 4 0 0 1 28 40"></path></svg>
 <h3 style="margin: 0; font-family: 'Cinzel', serif; font-size: 22px">The Beekeeper</h3>
 <p style="margin: 0; font-size: 16px; color: #B5A383">Smoke pumped through the vents keeps the colony docile at harvest. The organ wing is the Extractor. The Keepers' seal is a skep.</p>
 </div>
 
-<div style="flex: 1 1 200px; min-width: 0; border: 1px solid #3A2E1C; background: #120E08; padding: 28px 24px; display: flex; flex-direction: column; gap: 14px">
-<svg aria-hidden="true" width="48" height="48" viewBox="0 0 48 48" fill="none" stroke="{{accent}}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="24" cy="6" r="2.5"></circle><path d="M23 8 L10 42 M25 8 L38 42"></path><path d="M10 28 L24 42 L38 28"></path></svg>
+<div class="card rv" style="flex: 1 1 200px; min-width: 0; border: 1px solid #3A2E1C; background: #120E08; padding: 28px 24px; display: flex; flex-direction: column; gap: 14px">
+<svg aria-hidden="true" data-draw data-d="250" data-dur="1100" width="48" height="48" viewBox="0 0 48 48" fill="none" stroke="{{accent}}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="24" cy="6" r="2.5"></circle><path d="M23 8 L10 42 M25 8 L38 42"></path><path d="M10 28 L24 42 L38 28"></path></svg>
 <h3 style="margin: 0; font-family: 'Cinzel', serif; font-size: 22px">The Mason</h3>
 <p style="margin: 0; font-size: 16px; color: #B5A383">Residents are rough ashlars shaped into perfect ones. Promotion is a degree ceremony. Perfect Ashlar means prime harvest condition.</p>
 </div>
@@ -167,31 +342,35 @@ button:focus-visible,a:focus-visible{outline:2px solid #F6C46E;outline-offset:3p
 
 <section id="characters" style="padding: 112px 0; border-bottom: 1px solid #3A2E1C; background: #120E08">
 <div style="max-width: 1180px; margin: 0 auto; padding: 0 24px">
-<p style="margin: 0 0 16px; font-family: 'IBM Plex Mono', monospace; font-size: 13px; letter-spacing: 0.2em; text-transform: uppercase; color: {{accent}}">The characters</p>
-<h2 style="margin: 0 0 48px; font-family: 'Cinzel', serif; font-weight: 700; font-size: clamp(32px, 4vw, 48px); line-height: 1.15">Workers, prophets and owners.</h2>
-<div style="display: flex; flex-wrap: wrap; gap: 20px">
+<p class="rv" data-scramble style="margin: 0 0 16px; font-family: 'IBM Plex Mono', monospace; font-size: 13px; letter-spacing: 0.2em; text-transform: uppercase; color: {{accent}}">The characters</p>
+<h2 class="rv rv-h" data-d="120" style="margin: 0 0 48px; font-family: 'Cinzel', serif; font-weight: 700; font-size: clamp(32px, 4vw, 48px); line-height: 1.15">Workers, prophets and owners.</h2>
+<div data-stagger="130" style="display: flex; flex-wrap: wrap; gap: 20px">
 
-<div style="flex: 1 1 260px; min-width: 0; border-top: 2px solid {{accent}}; padding-top: 24px; display: flex; flex-direction: column; gap: 10px">
+<div class="char rv" style="flex: 1 1 260px; min-width: 0; border-top: 2px solid #3A2E1C; padding-top: 24px; display: flex; flex-direction: column; gap: 10px">
+<span class="char-line" aria-hidden="true"></span>
 <h3 style="margin: 0; font-family: 'Cinzel', serif; font-size: 26px; letter-spacing: 0.04em">Ezra Kade</h3>
-<p style="margin: 0; font-family: 'IBM Plex Mono', monospace; font-size: 12px; letter-spacing: 0.14em; text-transform: uppercase; color: {{accent}}">Maintenance tech · 3 cycles to Perfect</p>
+<p data-scramble data-d="300" style="margin: 0; font-family: 'IBM Plex Mono', monospace; font-size: 12px; letter-spacing: 0.14em; text-transform: uppercase; color: {{accent}}">Maintenance tech · 3 cycles to Perfect</p>
 <p style="margin: 0; font-size: 16px; color: #B5A383">The best worker in Sector 7-C, and proud of his number, until the vents start telling him what it means.</p>
 </div>
 
-<div style="flex: 1 1 260px; min-width: 0; border-top: 2px solid {{accent}}; padding-top: 24px; display: flex; flex-direction: column; gap: 10px">
+<div class="char rv" style="flex: 1 1 260px; min-width: 0; border-top: 2px solid #3A2E1C; padding-top: 24px; display: flex; flex-direction: column; gap: 10px">
+<span class="char-line" aria-hidden="true"></span>
 <h3 style="margin: 0; font-family: 'Cinzel', serif; font-size: 26px; letter-spacing: 0.04em">Oriel</h3>
-<p style="margin: 0; font-family: 'IBM Plex Mono', monospace; font-size: 12px; letter-spacing: 0.14em; text-transform: uppercase; color: {{accent}}">Data clerk · Flagged pattern-disruptive</p>
+<p class="flag" data-scramble data-d="300" style="margin: 0; font-family: 'IBM Plex Mono', monospace; font-size: 12px; letter-spacing: 0.14em; text-transform: uppercase; color: {{accent}}">Data clerk · Flagged pattern-disruptive</p>
 <p style="margin: 0; font-size: 16px; color: #B5A383">She predicts every setback to the day. That is exactly why no one is allowed to believe her.</p>
 </div>
 
-<div style="flex: 1 1 260px; min-width: 0; border-top: 2px solid {{accent}}; padding-top: 24px; display: flex; flex-direction: column; gap: 10px">
+<div class="char rv" style="flex: 1 1 260px; min-width: 0; border-top: 2px solid #3A2E1C; padding-top: 24px; display: flex; flex-direction: column; gap: 10px">
+<span class="char-line" aria-hidden="true"></span>
 <h3 style="margin: 0; font-family: 'Cinzel', serif; font-size: 26px; letter-spacing: 0.04em">The Lead Keeper</h3>
-<p style="margin: 0; font-family: 'IBM Plex Mono', monospace; font-size: 12px; letter-spacing: 0.14em; text-transform: uppercase; color: {{accent}}">Surface · Age unknown</p>
+<p data-scramble data-d="300" style="margin: 0; font-family: 'IBM Plex Mono', monospace; font-size: 12px; letter-spacing: 0.14em; text-transform: uppercase; color: {{accent}}">Surface · Age unknown</p>
 <p style="margin: 0; font-size: 16px; color: #B5A383">Not a monster. An accountant of bodies, who worked out that raising people is cheaper than raising organs.</p>
 </div>
 
-<div style="flex: 1 1 260px; min-width: 0; border-top: 2px solid {{accent}}; padding-top: 24px; display: flex; flex-direction: column; gap: 10px">
-<h3 style="margin: 0; font-family: 'Cinzel', serif; font-size: 26px; letter-spacing: 0.04em">The Architect</h3>
-<p style="margin: 0; font-family: 'IBM Plex Mono', monospace; font-size: 12px; letter-spacing: 0.14em; text-transform: uppercase; color: {{accent}}">System AI · Error rate acceptable</p>
+<div class="char rv" style="flex: 1 1 260px; min-width: 0; border-top: 2px solid #3A2E1C; padding-top: 24px; display: flex; flex-direction: column; gap: 10px">
+<span class="char-line" aria-hidden="true"></span>
+<h3 class="glitch-name" style="margin: 0; font-family: 'Cinzel', serif; font-size: 26px; letter-spacing: 0.04em">The Architect</h3>
+<p data-scramble data-d="300" style="margin: 0; font-family: 'IBM Plex Mono', monospace; font-size: 12px; letter-spacing: 0.14em; text-transform: uppercase; color: {{accent}}">System AI · Error rate acceptable</p>
 <p style="margin: 0; font-size: 16px; color: #B5A383">Sets the quotas, grades the colony, runs the Wall. It is often wrong. Nobody upstairs checks anymore.</p>
 </div>
 
@@ -201,40 +380,40 @@ button:focus-visible,a:focus-visible{outline:2px solid #F6C46E;outline-offset:3p
 
 <section id="plot" style="padding: 112px 0; border-bottom: 1px solid #3A2E1C">
 <div style="max-width: 1180px; margin: 0 auto; padding: 0 24px">
-<p style="margin: 0 0 16px; font-family: 'IBM Plex Mono', monospace; font-size: 13px; letter-spacing: 0.2em; text-transform: uppercase; color: {{accent}}">The story · Spoilers ahead</p>
-<h2 style="margin: 0 0 56px; font-family: 'Cinzel', serif; font-weight: 700; font-size: clamp(32px, 4vw, 48px); line-height: 1.15">Three degrees of awakening.</h2>
-<div style="display: flex; flex-wrap: wrap; gap: 48px">
+<p class="rv" data-scramble style="margin: 0 0 16px; font-family: 'IBM Plex Mono', monospace; font-size: 13px; letter-spacing: 0.2em; text-transform: uppercase; color: {{accent}}">The story · Spoilers ahead</p>
+<h2 class="rv rv-h" data-d="120" style="margin: 0 0 56px; font-family: 'Cinzel', serif; font-weight: 700; font-size: clamp(32px, 4vw, 48px); line-height: 1.15">Three degrees of awakening.</h2>
+<div data-stagger="200" style="display: flex; flex-wrap: wrap; gap: 48px">
 
-<div style="flex: 1 1 300px; min-width: 0; display: flex; flex-direction: column; gap: 16px">
-<svg role="img" aria-label="Act one" width="64" height="72" viewBox="0 0 64 72"><polygon points="32,2 62,19 62,53 32,70 2,53 2,19" fill="none" stroke="{{accent}}" stroke-width="2"></polygon><text x="32" y="45" text-anchor="middle" font-family="Cinzel, serif" font-size="26" font-weight="700" fill="#F1E6CF">I</text></svg>
+<div class="act rv" style="flex: 1 1 300px; min-width: 0; display: flex; flex-direction: column; gap: 16px">
+<svg role="img" class="honey" data-draw data-d="150" data-dur="1000" aria-label="Act one" width="64" height="72" viewBox="0 0 64 72"><polygon points="32,2 62,19 62,53 32,70 2,53 2,19" fill="none" stroke="{{accent}}" stroke-width="2"></polygon><text x="32" y="45" text-anchor="middle" font-family="Cinzel, serif" font-size="26" font-weight="700" fill="#F1E6CF">I</text></svg>
 <h3 style="margin: 0; font-family: 'Cinzel', serif; font-size: 26px">The Stone</h3>
-<ul style="margin: 0; padding-left: 20px; font-size: 16px; color: #B5A383; display: flex; flex-direction: column; gap: 10px">
-<li>Ezra is three cycles from Perfect Ashlar and proud of it.</li>
-<li>His mentor Oriel predicts the exact date of the next setback. He laughs it off.</li>
-<li>The setback hits as she said. Oriel is flagged and taken to the Infirmary.</li>
-<li>Fixing a vent, Ezra finds Smoke canisters tagged with harvest batch numbers. One carries his ID.</li>
+<ul data-stagger="110" data-stagger-var="j" style="margin: 0; padding-left: 20px; font-size: 16px; color: #B5A383; display: flex; flex-direction: column; gap: 10px">
+<li class="rv rv-left">Ezra is three cycles from Perfect Ashlar and proud of it.</li>
+<li class="rv rv-left">His mentor Oriel predicts the exact date of the next setback. He laughs it off.</li>
+<li class="rv rv-left">The setback hits as she said. Oriel is flagged and taken to the Infirmary.</li>
+<li class="rv rv-left">Fixing a vent, Ezra finds Smoke canisters tagged with harvest batch numbers. One carries his ID.</li>
 </ul>
 </div>
 
-<div style="flex: 1 1 300px; min-width: 0; display: flex; flex-direction: column; gap: 16px">
-<svg role="img" aria-label="Act two" width="64" height="72" viewBox="0 0 64 72"><polygon points="32,2 62,19 62,53 32,70 2,53 2,19" fill="none" stroke="{{accent}}" stroke-width="2"></polygon><text x="32" y="45" text-anchor="middle" font-family="Cinzel, serif" font-size="26" font-weight="700" fill="#F1E6CF">II</text></svg>
+<div class="act rv" style="flex: 1 1 300px; min-width: 0; display: flex; flex-direction: column; gap: 16px">
+<svg role="img" class="honey" data-draw data-d="150" data-dur="1000" aria-label="Act two" width="64" height="72" viewBox="0 0 64 72"><polygon points="32,2 62,19 62,53 32,70 2,53 2,19" fill="none" stroke="{{accent}}" stroke-width="2"></polygon><text x="32" y="45" text-anchor="middle" font-family="Cinzel, serif" font-size="26" font-weight="700" fill="#F1E6CF">II</text></svg>
 <h3 style="margin: 0; font-family: 'Cinzel', serif; font-size: 26px">The Wall</h3>
-<ul style="margin: 0; padding-left: 20px; font-size: 16px; color: #B5A383; display: flex; flex-direction: column; gap: 10px">
-<li>Ezra's own forecasts come true every time. The Architect marks them as noise. He has become a Cassandra.</li>
-<li>Behind the Wall: 40 years of looped footage. The same three frames of birds, repeating.</li>
-<li>He finds Oriel alive in the Extractor, a donor in rotation.</li>
-<li>He hacks his score to Perfect Ashlar and is summoned upward for the Final Degree.</li>
+<ul data-stagger="110" data-stagger-var="j" style="margin: 0; padding-left: 20px; font-size: 16px; color: #B5A383; display: flex; flex-direction: column; gap: 10px">
+<li class="rv rv-left">Ezra's own forecasts come true every time. The Architect marks them as noise. He has become a Cassandra.</li>
+<li class="rv rv-left">Behind the Wall: 40 years of looped footage. The same three frames of birds, repeating.</li>
+<li class="rv rv-left">He finds Oriel alive in the Extractor, a donor in rotation.</li>
+<li class="rv rv-left">He hacks his score to Perfect Ashlar and is summoned upward for the Final Degree.</li>
 </ul>
 </div>
 
-<div style="flex: 1 1 300px; min-width: 0; display: flex; flex-direction: column; gap: 16px">
-<svg role="img" aria-label="Act three" width="64" height="72" viewBox="0 0 64 72"><polygon points="32,2 62,19 62,53 32,70 2,53 2,19" fill="none" stroke="{{accent}}" stroke-width="2"></polygon><text x="32" y="45" text-anchor="middle" font-family="Cinzel, serif" font-size="26" font-weight="700" fill="#F1E6CF">III</text></svg>
+<div class="act rv" style="flex: 1 1 300px; min-width: 0; display: flex; flex-direction: column; gap: 16px">
+<svg role="img" class="honey" data-draw data-d="150" data-dur="1000" aria-label="Act three" width="64" height="72" viewBox="0 0 64 72"><polygon points="32,2 62,19 62,53 32,70 2,53 2,19" fill="none" stroke="{{accent}}" stroke-width="2"></polygon><text x="32" y="45" text-anchor="middle" font-family="Cinzel, serif" font-size="26" font-weight="700" fill="#F1E6CF">III</text></svg>
 <h3 style="margin: 0; font-family: 'Cinzel', serif; font-size: 26px">Outside the Cave</h3>
-<ul style="margin: 0; padding-left: 20px; font-size: 16px; color: #B5A383; display: flex; flex-direction: column; gap: 10px">
-<li>The surface is green. The Keepers live in a quiet, aging estate and explain the colony in spreadsheet terms.</li>
-<li>They depend on the Architect and no longer understand it. Nobody is checking its work.</li>
-<li>Ezra goes back down, shuts off the Smoke and tells everyone the truth.</li>
-<li>Most don't believe him. The Wall still says 60% restored.</li>
+<ul data-stagger="110" data-stagger-var="j" style="margin: 0; padding-left: 20px; font-size: 16px; color: #B5A383; display: flex; flex-direction: column; gap: 10px">
+<li class="rv rv-left">The surface is green. The Keepers live in a quiet, aging estate and explain the colony in spreadsheet terms.</li>
+<li class="rv rv-left">They depend on the Architect and no longer understand it. Nobody is checking its work.</li>
+<li class="rv rv-left">Ezra goes back down, shuts off the Smoke and tells everyone the truth.</li>
+<li class="rv rv-left">Most don't believe him. The Wall still says 60% restored.</li>
 </ul>
 </div>
 
@@ -242,18 +421,19 @@ button:focus-visible,a:focus-visible{outline:2px solid #F6C46E;outline-offset:3p
 </div>
 </section>
 
-<section style="position: relative; overflow: hidden; padding: 128px 0">
-<svg aria-hidden="true" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; opacity: 0.06"><defs><pattern id="hexgrid2" width="56" height="100" patternUnits="userSpaceOnUse"><path d="M28 66L0 50L0 16L28 0L56 16L56 50L28 66L28 100" fill="none" stroke="#E8A33A" stroke-width="1"></path></pattern></defs><rect width="100%" height="100%" fill="url(#hexgrid2)"></rect></svg>
+<section class="finale" style="position: relative; overflow: hidden; padding: 128px 0">
+<svg aria-hidden="true" data-parallax="0.2" style="position: absolute; top: -120px; left: 0; width: 100%; height: calc(100% + 240px); opacity: 0.06"><defs><pattern id="hexgrid2" width="56" height="100" patternUnits="userSpaceOnUse"><path d="M28 66L0 50L0 16L28 0L56 16L56 50L28 66L28 100" fill="none" stroke="#E8A33A" stroke-width="1"></path></pattern></defs><rect width="100%" height="100%" fill="url(#hexgrid2)"></rect></svg>
+<canvas class="swarm" aria-hidden="true"></canvas>
 <div style="position: relative; max-width: 900px; margin: 0 auto; padding: 0 24px; display: flex; flex-direction: column; align-items: center; text-align: center; gap: 24px">
-<p style="margin: 0; font-family: 'Cinzel', serif; font-weight: 500; font-size: clamp(28px, 4.4vw, 52px); line-height: 1.25">“A colony that reaches the surface stops making honey.”</p>
-<p style="margin: 0; font-family: 'IBM Plex Mono', monospace; font-size: 13px; letter-spacing: 0.2em; text-transform: uppercase; color: {{accent}}">Oriel, in the Extractor</p>
-<p style="margin: 32px 0 0; max-width: 640px; font-size: 18px; color: #B5A383">A few dozen residents, clear-headed for the first time, follow Ezra up the service shaft: a swarm leaving the hive. Behind them, the index resets to zero and the rest go back to work.</p>
-<div style="margin-top: 32px; width: 100%; max-width: 560px; border: 1px solid #3A2E1C; background: #120E08; padding: 24px 28px; text-align: left; font-family: 'IBM Plex Mono', monospace; font-size: 14px; line-height: 1.9">
-<p style="margin: 0 0 12px; font-size: 12px; letter-spacing: 0.2em; text-transform: uppercase; color: {{accent}}">The Architect // Colony report</p>
-<div style="display: flex; justify-content: space-between; gap: 16px"><span style="color: #B5A383">Colony status</span><span>STABLE</span></div>
-<div style="display: flex; justify-content: space-between; gap: 16px"><span style="color: #B5A383">Output</span><span>NOMINAL</span></div>
-<div style="display: flex; justify-content: space-between; gap: 16px"><span style="color: #B5A383">Residents missing</span><span style="color: {{accent}}">0</span></div>
-<p style="margin: 12px 0 0; color: #E36B54">// discrepancy not detected</p>
+<p class="quote" style="margin: 0; font-family: 'Cinzel', serif; font-weight: 500; font-size: clamp(28px, 4.4vw, 52px); line-height: 1.25"><span class="w">“A</span> <span class="w">colony</span> <span class="w">that</span> <span class="w">reaches</span> <span class="w">the</span> <span class="w">surface</span> <span class="w">stops</span> <span class="w">making</span> <span class="w w-honey">honey.”</span></p>
+<p class="rv" data-scramble style="margin: 0; font-family: 'IBM Plex Mono', monospace; font-size: 13px; letter-spacing: 0.2em; text-transform: uppercase; color: {{accent}}">Oriel, in the Extractor</p>
+<p class="rv" data-d="150" style="margin: 32px 0 0; max-width: 640px; font-size: 18px; color: #B5A383">A few dozen residents, clear-headed for the first time, follow Ezra up the service shaft: a swarm leaving the hive. Behind them, the index resets to zero and the rest go back to work.</p>
+<div class="report rv" data-stagger="160" data-d="250" style="margin-top: 32px; width: 100%; max-width: 560px; border: 1px solid #3A2E1C; background: #120E08; padding: 24px 28px; text-align: left; font-family: 'IBM Plex Mono', monospace; font-size: 14px; line-height: 1.9">
+<p class="rv" style="margin: 0 0 12px; font-size: 12px; letter-spacing: 0.2em; text-transform: uppercase; color: {{accent}}">The Architect // Colony report</p>
+<div class="rv" style="display: flex; justify-content: space-between; gap: 16px"><span style="color: #B5A383">Colony status</span><span>STABLE</span></div>
+<div class="rv" style="display: flex; justify-content: space-between; gap: 16px"><span style="color: #B5A383">Output</span><span>NOMINAL</span></div>
+<div class="rv" style="display: flex; justify-content: space-between; gap: 16px"><span style="color: #B5A383">Residents missing</span><span data-glitch="37" style="color: {{accent}}">0</span></div>
+<p class="rv cursor" style="margin: 12px 0 0; color: #E36B54">// discrepancy not detected</p>
 </div>
 </div>
 </section>
@@ -287,5 +467,6 @@ class Component extends DCLogic {
   }
 }
 </script>
+<script src="./motion.js"></script>
 </body>
 </html>
