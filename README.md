@@ -19,3 +19,10 @@ rather than copy wholesale.
 
 Serve the folder (e.g. `python3 -m http.server`) and open `Main.dc.html`;
 some browsers block the scripts over file://.
+
+## Deploying (Vercel)
+
+Static site, no build step. Import the repo in Vercel with the
+framework preset "Other" and leave the build/output settings empty.
+`vercel.json` rewrites `/` to `Main.dc.html`, so the site loads at the
+root URL.
